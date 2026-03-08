@@ -29,6 +29,17 @@ namespace CardHouse
             if (!IsSeeking)
                 return;
 
+            if (MyStrategy == null)
+            {
+                MyStrategy = Strategy?.GetStrategy() ?? GetDefaultSeeker();
+                if (MyStrategy == null)
+                {
+                    IsSeeking = false;
+                    return;
+                }
+                MyStrategy.StartSeeking(GetCurrentValue(), GetCurrentValue());
+            }
+
             var newValue = MyStrategy.Pump(GetCurrentValue(), Time.deltaTime);
             SetNewValue(newValue);
 
